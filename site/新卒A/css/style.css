@@ -157,7 +157,7 @@ ul { list-style: none; }
   width: 100%; height: 100%;
   object-fit: cover;
 }
-.scene-bg--2 { opacity: 0; }
+.scene-bg--2 { opacity: 0; transform: translateY(60px); }
 
 /* 右側グラデーションオーバーレイ（テキスト可読性確保） */
 .scene-overlay {
@@ -413,15 +413,48 @@ ul { list-style: none; }
 .footer__copy { font-size: 10.5px; color: rgba(255,255,255,0.32); letter-spacing: 0.06em; }
 
 /* =========================================
+   Hero Body Copy Overlay
+   Layer2 が出た後（scroll progress ≥ 0.20）に上から順次フェードイン
+========================================= */
+.hero-copy {
+  position: absolute;
+  top: 8%;
+  right: 3%;
+  width: 33%;
+  z-index: 10;
+  pointer-events: none;
+}
+.hero-copy__para {
+  display: block;
+  margin-bottom: 1.6em;
+}
+.hero-copy__para:last-child { margin-bottom: 0; }
+.hero-copy__line {
+  display: block;
+  font-family: 'A P-OTF 瓦ゴシック ProN', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+  font-size: clamp(0.8rem, 1.2vw, 1.05rem);
+  font-weight: 400;
+  color: #fff;
+  line-height: 2;
+  letter-spacing: 0.08em;
+  text-shadow: 0 1px 10px rgba(0,0,0,0.3);
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  will-change: opacity, transform;
+}
+
+/* =========================================
    Design Section (TOP mockup image — SPECIAL〜RECRUIT)
-   画像比率: 3201×12778 = 1:3.993
-   白余白開始 y≈3620: margin-top = -(3620/12778 × 3.993) ≈ -113% → バッファ込み -115%
+   画像比率: 3201×10859 = 1:3.392
+   デザインコンテンツ開始 y≈2388（22%）: margin-top = -(22% × 3.392) ≈ -75%
 ========================================= */
 .design-section {
   overflow: hidden;
   line-height: 0;
   background: #f7f6f3;
   position: relative;
+  margin-top: -2px; /* FV末端の細い帯を重ねて隠す */
 }
 /* PICK UP カードへの透明クリック領域 */
 .design-section__link {
@@ -432,8 +465,8 @@ ul { list-style: none; }
 .design-section img {
   display: block;
   width: 100%;
-  /* FV2面分の「まかせろ」帯をスキップ → SPECIAL白余白から表示 */
-  margin-top: -115%;
+  /* 白セパレーター中央から表示 (y≈1921〜) → SPECIAL見出しが確実に見える */
+  margin-top: -60%;
 }
 
 /* =========================================

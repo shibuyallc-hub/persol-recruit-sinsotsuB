@@ -18,6 +18,11 @@
   const bg2       = document.querySelector('.scene-bg--2');
   const scrollInd = document.getElementById('scrollInd');
 
+  /* --- ボディコピー --- */
+  const copyLines  = Array.from(document.querySelectorAll('.hero-copy__line'));
+  const COPY_START = 0.20;
+  const COPY_END   = 0.60;
+
   /* --- ユーティリティ --- */
   function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
   function easeInOut(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
@@ -41,10 +46,26 @@
     const total    = scene.offsetHeight - window.innerHeight; // アニメーション総距離
     const p        = clamp(scrolled / total, 0, 1);
 
-    /* ── 画像クロスフェード: 0.00 → 0.20 ── */
+    /* ── Layer2 下からフェードイン: 0.00 → 0.20 ── */
     const fade = prog(p, 0, 0.20);
     if (bg1) bg1.style.opacity = String(1 - fade);
-    if (bg2) bg2.style.opacity = String(fade);
+    if (bg2) {
+      bg2.style.opacity = String(fade);
+      bg2.style.transform = `translateY(${(1 - fade) * 60}px)`;
+    }
+
+    /* ── ボディコピー 上から順次フェードイン: 0.20 → 0.60 (双方向) ── */
+    const lineCount = copyLines.length - 1 || 1;
+    copyLines.forEach((el, i) => {
+      const threshold = COPY_START + (i / lineCount) * (COPY_END - COPY_START);
+      if (p >= threshold) {
+        el.style.opacity   = '1';
+        el.style.transform = 'translateY(0)';
+      } else {
+        el.style.opacity   = '0';
+        el.style.transform = 'translateY(-8px)';
+      }
+    });
 
   }
 
