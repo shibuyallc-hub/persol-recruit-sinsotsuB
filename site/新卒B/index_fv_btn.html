@@ -9,6 +9,30 @@
     body { background: #000; }
 
     /* ======================================================
+       ローディングオーバーレイ
+    ====================================================== */
+    #loading {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      overflow: hidden;
+      opacity: 1;
+      transition: opacity 0.9s ease;
+      pointer-events: all;
+    }
+    #loading img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+    }
+    #loading.is-hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* ======================================================
        FV スライダー
     ====================================================== */
     .fv-slider {
@@ -53,11 +77,15 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: background 0.2s, border-color 0.2s;
+      transition: background 0.2s, border-color 0.2s, opacity 0.2s;
     }
     .fv-btn:hover {
       background: rgba(255, 255, 255, 0.3);
       border-color: rgba(255, 255, 255, 0.65);
+    }
+    .fv-btn:disabled {
+      opacity: 0.25;
+      cursor: default;
     }
     .fv-btn--prev { left: 28px; }
     .fv-btn--next { right: 28px; }
@@ -141,13 +169,15 @@
 </head>
 <body>
 
-  <!-- ===== FV スライダー ===== -->
+  <!-- ===== ローディング画面 ===== -->
+  <div id="loading">
+    <img src="../../top/新卒B/ローディング画面〜FV展開イメージ/01_loading.jpg" alt="">
+  </div>
+
+  <!-- ===== FV スライダー（02〜06、5枚） ===== -->
   <div class="fv-slider" id="fvSlider">
 
     <div class="slide is-active">
-      <img src="../../top/新卒B/ローディング画面〜FV展開イメージ/01_loading.jpg" alt="">
-    </div>
-    <div class="slide">
       <img src="../../top/新卒B/ローディング画面〜FV展開イメージ/02.jpg" alt="はたらくをおもしろく、あたらしく。">
     </div>
     <div class="slide">
@@ -179,18 +209,17 @@
       </svg>
     </button>
 
-    <!-- ドット -->
+    <!-- ドット（5個） -->
     <div class="fv-dots" id="fvDots">
       <button class="fv-dot is-active" data-target="0" aria-label="1枚目"></button>
       <button class="fv-dot" data-target="1" aria-label="2枚目"></button>
       <button class="fv-dot" data-target="2" aria-label="3枚目"></button>
       <button class="fv-dot" data-target="3" aria-label="4枚目"></button>
       <button class="fv-dot" data-target="4" aria-label="5枚目"></button>
-      <button class="fv-dot" data-target="5" aria-label="6枚目"></button>
     </div>
 
     <!-- カウンター -->
-    <div class="fv-counter" id="fvCounter">1 / 6</div>
+    <div class="fv-counter" id="fvCounter">1 / 5</div>
 
     <!-- 自動切り替えプログレスバー -->
     <div class="fv-progress" id="fvProgress"></div>
@@ -211,27 +240,41 @@
   (function () {
     'use strict';
 
-    const slides    = Array.from(document.querySelectorAll('.slide'));
-    const dots      = Array.from(document.querySelectorAll('.fv-dot'));
-    const counter   = document.getElementById('fvCounter');
-    const btnPrev   = document.getElementById('btnPrev');
-    const btnNext   = document.getElementById('btnNext');
+    /* ===== ローディング ===== */
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        var el = document.getElementById('loading');
+        el.classList.add('is-hidden');
+        setTimeout(function () { el.style.display = 'none'; }, 900);
+      }, 1800); /* 表示時間 1.8s → フェードアウト 0.9s */
+    });
+
+    /* ===== FV スライダー ===== */
+    const slides     = Array.from(document.querySelectorAll('.slide'));
+    const dots       = Array.from(document.querySelectorAll('.fv-dot'));
+    const counter    = document.getElementById('fvCounter');
+    const btnPrev    = document.getElementById('btnPrev');
+    const btnNext    = document.getElementById('btnNext');
     const progressEl = document.getElementById('fvProgress');
-    const N         = slides.length; // 6
-    const DURATION  = 680;   // スライドアニメーション (ms)
-    const AUTO_SEC  = 5;     // 自動切り替え秒数
+    const N          = slides.length; // 5
+    const DURATION   = 680;   // スライドアニメーション (ms)
+    const AUTO_SEC   = 5;     // 自動切り替え秒数
 
     let current   = 0;
     let animating = false;
     let autoTimer = null;
-    let progressTimer = null;
+
+    /* ── ボタン状態更新 ── */
+    function updateButtons() {
+      btnPrev.disabled = (current === 0);
+      btnNext.disabled = (current === N - 1);
+    }
 
     /* ── プログレスバー ── */
     function startProgress() {
       progressEl.style.transition = 'none';
       progressEl.style.width = '0%';
-      // 強制リフロー
-      progressEl.getBoundingClientRect();
+      progressEl.getBoundingClientRect(); // 強制リフロー
       progressEl.style.transition = `width ${AUTO_SEC}s linear`;
       progressEl.style.width = '100%';
     }
@@ -240,13 +283,16 @@
       progressEl.style.width = '0%';
     }
 
-    /* ── 自動切り替えタイマー ── */
+    /* ── 自動切り替えタイマー（最終スライドで停止） ── */
     function startAutoTimer() {
       clearTimeout(autoTimer);
+      if (current >= N - 1) {
+        resetProgress();
+        return; /* 最終スライドなら停止 */
+      }
       startProgress();
       autoTimer = setTimeout(() => {
-        goTo((current + 1) % N, 'next');
-        // アニメーション完了後に次のタイマーを再起動（ループ）
+        goTo(current + 1, 'next'); /* ループしない */
         setTimeout(startAutoTimer, DURATION + 80);
       }, AUTO_SEC * 1000);
     }
@@ -259,6 +305,7 @@
     /* ── スライド遷移 ── */
     function goTo(next, dir) {
       if (animating || next === current) return;
+      if (next < 0 || next >= N) return;
       animating = true;
 
       const prev = current;
@@ -268,12 +315,10 @@
       const leaveTo   = dir === 'next' ? '-100%' : '100%';
       const ease      = `transform ${DURATION}ms cubic-bezier(0.77, 0, 0.175, 1)`;
 
-      // 進入スライド：位置セット（transition なし）
       slides[current].style.transition = 'none';
       slides[current].style.transform  = `translateX(${enterFrom})`;
-      slides[current].getBoundingClientRect(); // 強制リフロー
+      slides[current].getBoundingClientRect();
 
-      // アニメーション開始
       slides[current].style.transition = ease;
       slides[current].style.transform  = 'translateX(0%)';
       slides[current].classList.add('is-active');
@@ -282,11 +327,10 @@
       slides[prev].style.transform  = `translateX(${leaveTo})`;
       slides[prev].classList.remove('is-active');
 
-      // ドット & カウンター 更新
       dots.forEach((d, i) => d.classList.toggle('is-active', i === current));
       counter.textContent = `${current + 1} / ${N}`;
+      updateButtons();
 
-      // 完了後リセット
       setTimeout(() => {
         slides[prev].style.transition = 'none';
         slides[prev].style.transform  = 'translateX(100%)';
@@ -294,14 +338,18 @@
       }, DURATION + 60);
     }
 
-    /* ── ボタン操作 ── */
+    /* ── ボタン操作（端では動かない） ── */
     btnNext.addEventListener('click', () => {
-      goTo((current + 1) % N, 'next');
-      resetAutoTimer();
+      if (current < N - 1) {
+        goTo(current + 1, 'next');
+        resetAutoTimer();
+      }
     });
     btnPrev.addEventListener('click', () => {
-      goTo((current - 1 + N) % N, 'prev');
-      resetAutoTimer();
+      if (current > 0) {
+        goTo(current - 1, 'prev');
+        resetAutoTimer();
+      }
     });
 
     /* ── ドット操作 ── */
@@ -317,11 +365,12 @@
 
     /* ── キーボード操作 ── */
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight') { goTo((current + 1) % N, 'next'); resetAutoTimer(); }
-      if (e.key === 'ArrowLeft')  { goTo((current - 1 + N) % N, 'prev'); resetAutoTimer(); }
+      if (e.key === 'ArrowRight' && current < N - 1) { goTo(current + 1, 'next'); resetAutoTimer(); }
+      if (e.key === 'ArrowLeft'  && current > 0)     { goTo(current - 1, 'prev'); resetAutoTimer(); }
     });
 
-    /* ── 自動切り替え開始 ── */
+    /* ── 初期化 ── */
+    updateButtons();
     startAutoTimer();
 
   }());
