@@ -3,23 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>パーソルテンプスタッフ 中途採用 — 中途A（スライド版）</title>
+  <title>パーソルテンプスタッフ 中途採用 — 中途A（スライド版 TOP）</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { line-height: 0; }
-    .img-wrap { position: relative; line-height: 0; }
-    .img-wrap img { display: block; width: 100%; }
-    .img-wrap__link { position: absolute; display: block; cursor: pointer; }
+
+    .sec {
+      position: relative;
+      overflow: hidden;
+      line-height: 0;
+    }
+    .sec img {
+      display: block;
+      width: 100%;
+    }
+    .sec__link {
+      position: absolute;
+      display: block;
+      cursor: pointer;
+    }
+
+    /* ── Section 1: icon画像 上部（FV〜COMPANYセクション直前） ──
+       icon: 3201×8913px
+       COMPANY開始 y≈3614 → 3614/3201×100vw = 112.9vw            */
+    .sec--icon-top {
+      height: 112.9vw;  /* ※要確認・調整 */
+    }
+
+    /* ── Section 2: スライドCOMPANYセクション（切り出し済み画像） ──
+       3201×1290px → 表示高さ = 1290/3201×100vw = 40.3vw（自動）  */
+    /* 高さ指定不要: width:100% で自動計算                           */
+
+    /* ── Section 3: icon画像 下部（COMPANYセクション以降） ──
+       icon: COMPANY終了 y≈4934 → -(4934/3201×100%) = -154.1%     */
+    .sec--icon-bottom img {
+      margin-top: -154.1%;  /* ※要確認・調整 */
+    }
   </style>
 </head>
 <body>
-  <div class="img-wrap">
-    <img src="../../top/中途A/中途A_top_slide_saisyu.jpg" alt="中途A TOP スライド版">
-    <!-- ビジネスイノベーション → 仕事・業務要件詳細へ -->
-    <a href="../中途B/job_detail.html"
-       class="img-wrap__link"
-       style="top:69.3%;left:0;width:30.9%;height:6.3%;"
-       aria-label="ビジネスイノベーション"></a>
+
+  <!-- Section 1: icon画像 上部（FV〜COMPANY直前） -->
+  <div class="sec sec--icon-top">
+    <img src="../../top/中途A/中途A_top_icon_saisyu_2.jpg?v=2" alt="">
   </div>
+
+  <!-- Section 2: スライド版COMPANYセクション（切り出し済み画像） -->
+  <div class="sec">
+    <img src="../../top/中途A/中途A_top_slide_saisyu_slide部分.png" alt="">
+  </div>
+
+  <!-- Section 3: icon画像 下部（COMPANY以降〜フッター） -->
+  <div class="sec sec--icon-bottom">
+    <img src="../../top/中途A/中途A_top_icon_saisyu_2.jpg?v=2" alt="">
+  </div>
+
 </body>
 </html>
