@@ -4,9 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>仕事・業務要件詳細 | パーソルテンプスタッフ 中途採用</title>
-  <style>* { margin: 0; padding: 0; box-sizing: border-box; } body { line-height: 0; }</style>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { line-height: 0; }
+    .page-wrap { position: relative; }
+    .page-wrap img { display: block; width: 100%; }
+    /* ロゴ・社名エリアの透明リンク */
+    .logo-link {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 22%;
+      height: 4%;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <img src="../../kasou/中途B version_仕事や業務要件詳細ページ.jpg" alt="仕事・業務要件詳細" style="display:block; width:100%;">
+  <div class="page-wrap">
+    <img src="../../kasou/中途B version_仕事や業務要件詳細ページ.jpg" alt="仕事・業務要件詳細">
+    <a id="logoLink" href="index_slide.html" class="logo-link" aria-label="トップへ戻る"></a>
+  </div>
+
+  <script>
+  (function () {
+    var params = new URLSearchParams(window.location.search);
+    var from   = params.get('from');
+    var link   = document.getElementById('logoLink');
+    if (from === 'icon') {
+      link.href = 'index_icon.html';
+    } else {
+      link.href = 'index_slide.html';
+    }
+  }());
+  </script>
 </body>
 </html>

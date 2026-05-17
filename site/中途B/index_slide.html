@@ -6,20 +6,238 @@
   <title>パーソルテンプスタッフ 中途採用 — 中途B（スライド版）</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { line-height: 0; }
-    .img-wrap { position: relative; line-height: 0; }
-    .img-wrap img { display: block; width: 100%; }
-    .img-wrap__link { position: absolute; display: block; cursor: pointer; }
+    body { background: #000; line-height: 0; }
+
+    /* ======================================================
+       スクロールヒーロー（300vh sticky）
+    ====================================================== */
+    .scroll-hero {
+      position: relative;
+      height: 300vh;
+    }
+    .scroll-hero__inner {
+      position: sticky;
+      top: 0;
+      height: 100svh;
+      overflow: hidden;
+    }
+
+    /* ── シーン背景 ── */
+    .scene-bg {
+      position: absolute;
+      will-change: transform;
+    }
+
+    /* Scene1: 静止・フル表示（ヘッダー常時表示） */
+    .scene-bg--1 {
+      inset: 0;
+    }
+    .scene-bg--1 img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Scene2: Scene1と同じく全画面、初期は右に待機 */
+    .scene-bg--2 {
+      inset: 0;
+      transform: translateX(100%);
+    }
+
+    /* Scene2 画像（差し替え後はクロップ不要） */
+    .scene-bg--2 img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+    }
+
+    /* ── ボディコピー（左配置・ヘッダー下） ── */
+    .hero-copy {
+      position: absolute;
+      top: 10%;    /* ヘッダー(7%) + 余白 */
+      left: 3%;
+      width: 38%;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .hero-copy__para {
+      display: block;
+      margin-bottom: 1.4em;
+    }
+    .hero-copy__para:last-child { margin-bottom: 0; }
+    .hero-copy__line {
+      display: block;
+      font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+      font-size: clamp(0.72rem, 1.0vw, 0.88rem);
+      font-weight: 400;
+      color: #111;
+      line-height: 2;
+      letter-spacing: 0.05em;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      will-change: opacity, transform;
+    }
+
+    /* ── キャッチコピー（左下・大きく） ── */
+    .hero-catch {
+      position: absolute;
+      bottom: 12%;
+      left: 3%;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .hero-catch__line {
+      display: block;
+      font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+      font-size: clamp(2rem, 4.5vw, 4rem);
+      font-weight: 700;
+      color: #111;
+      line-height: 1.4;
+      letter-spacing: -0.01em;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      will-change: opacity, transform;
+    }
+
+    /* ======================================================
+       デザインセクション（3Dセクションをスキップ）
+    ====================================================== */
+    .design-section {
+      position: relative;
+      overflow: hidden;
+      line-height: 0;
+      background: #fff;
+    }
+    .design-section img {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin-top: -110%; /* 37% × ratio(2.963) = 109.6% */
+    }
+    .design-section__link {
+      position: absolute;
+      display: block;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <div class="img-wrap">
+
+  <!-- ===== スクロールヒーロー ===== -->
+  <section class="scroll-hero" id="scrollHero">
+    <div class="scroll-hero__inner">
+
+      <!-- Scene1: FV画像（静止・ヘッダー常時表示） -->
+      <div class="scene-bg scene-bg--1">
+        <img src="../../fv/中途B.jpg" alt="はたらくを変える、しくみをつくろう。"
+             style="object-position: center top;">
+      </div>
+
+      <!-- Scene2: 差し替え3Dイラスト -->
+      <div class="scene-bg scene-bg--2">
+        <img src="../../fv/中途B_fv2個目.png" alt="">
+      </div>
+
+      <!-- ボディコピー（左配置・ヘッダー下）: 15行 -->
+      <div class="hero-copy">
+        <p class="hero-copy__para">
+          <span class="hero-copy__line">はたらくにまつわる不自由は、</span>
+          <span class="hero-copy__line">根性論では解決できない。</span>
+          <span class="hero-copy__line">必要なのは、人々の想いを汲みあげ、</span>
+          <span class="hero-copy__line">しなやかに選択肢に変える「しくみ」だ。</span>
+        </p>
+        <p class="hero-copy__para">
+          <span class="hero-copy__line">無理だと言われた働き方が、あたらしいふつうになる。</span>
+          <span class="hero-copy__line">埋もれていた可能性に、光が当たるようになる。</span>
+          <span class="hero-copy__line">派手なニュースにはならなくても、</span>
+          <span class="hero-copy__line">たしかに誰かのはたらく人生を軽やかにする</span>
+          <span class="hero-copy__line">「社会インフラ」をつくること。</span>
+          <span class="hero-copy__line">それが私たちにしかできない</span>
+          <span class="hero-copy__line">可能性創造への挑戦だと考えています。</span>
+        </p>
+        <p class="hero-copy__para">
+          <span class="hero-copy__line">今日より先を生きる人々が</span>
+          <span class="hero-copy__line">あたりまえのように、はたらいて笑える世界をめざして。</span>
+          <span class="hero-copy__line">あなたとともに「はたらく」のパラダイムシフトに挑む、</span>
+          <span class="hero-copy__line">パーソルテンプスタッフです。</span>
+        </p>
+      </div>
+
+      <!-- キャッチコピー（左下・大きく）: 2行 -->
+      <div class="hero-catch">
+        <span class="hero-catch__line">はたらくを変える、</span>
+        <span class="hero-catch__line">しくみをつくろう。</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== デザインセクション（3Dセクション除外） ===== -->
+  <div class="design-section">
     <img src="../../top/中途B/中途B_top_slide_saisyu.jpg" alt="中途B TOP スライド版">
     <!-- ビジネスイノベーション → 仕事・業務要件詳細へ -->
-    <a href="job_detail.html"
-       class="img-wrap__link"
-       style="top:69.8%;left:0;width:30.9%;height:7.8%;"
+    <a href="job_detail.html?from=slide"
+       class="design-section__link"
+       style="top:52%;left:0;width:30.9%;height:12.4%;"
        aria-label="ビジネスイノベーション"></a>
   </div>
+
+  <script>
+  (function () {
+    'use strict';
+
+    const scene      = document.getElementById('scrollHero');
+    const bg2        = document.querySelector('.scene-bg--2');
+    const copyLines  = Array.from(document.querySelectorAll('.hero-copy__line'));  /* 15行 */
+    const catchLines = Array.from(document.querySelectorAll('.hero-catch__line')); /* 2行 */
+
+    const SLIDE_END   = 0.20;
+    const COPY_START  = 0.20;
+    const COPY_END    = 0.60;
+    const CATCH_START = 0.60;
+    const CATCH_END   = 0.70;
+
+    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+    function easeInOut(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+
+    function update() {
+      if (!scene) return;
+      const rect     = scene.getBoundingClientRect();
+      const scrolled = -rect.top;
+      const total    = scene.offsetHeight - window.innerHeight;
+      const p        = clamp(scrolled / total, 0, 1);
+
+      /* Scene2 右からスライドイン（Scene1は静止・ヘッダー残存） */
+      const slide = easeInOut(clamp(p / SLIDE_END, 0, 1));
+      if (bg2) bg2.style.transform = `translateX(${(1 - slide) * 100}%)`;
+
+      /* ボディコピー 15行: 上から下に順次フェードイン（双方向） */
+      const lineCount = copyLines.length - 1 || 1;
+      copyLines.forEach(function (el, i) {
+        const threshold = COPY_START + (i / lineCount) * (COPY_END - COPY_START);
+        el.style.opacity   = p >= threshold ? '1' : '0';
+        el.style.transform = p >= threshold ? 'translateY(0)' : 'translateY(-8px)';
+      });
+
+      /* キャッチコピー 2行: 順次フェードイン（双方向） */
+      const catchCount = catchLines.length - 1 || 1;
+      catchLines.forEach(function (el, i) {
+        const threshold = CATCH_START + (i / catchCount) * (CATCH_END - CATCH_START);
+        el.style.opacity   = p >= threshold ? '1' : '0';
+        el.style.transform = p >= threshold ? 'translateY(0)' : 'translateY(-8px)';
+      });
+    }
+
+    window.addEventListener('scroll', update, { passive: true });
+    update(); /* 初期状態セット */
+
+  }());
+  </script>
+
 </body>
 </html>
