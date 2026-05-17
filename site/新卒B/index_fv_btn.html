@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>パーソルテンプスタッフ 新卒採用 2027</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #000; }
+
+    /* ======================================================
+       FV スライダー
+    ====================================================== */
+    .fv-slider {
+      position: relative;
+      width: 100%;
+      height: 100svh;
+      overflow: hidden;
+    }
+
+    /* スライド共通 */
+    .slide {
+      position: absolute;
+      inset: 0;
+      transform: translateX(100%);   /* デフォルト：右に待機 */
+      will-change: transform;
+    }
+    .slide.is-active {
+      transform: translateX(0%);
+    }
+    .slide img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+    }
+
+    /* ── 左右ナビボタン ── */
+    .fv-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .fv-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.65);
+    }
+    .fv-btn--prev { left: 28px; }
+    .fv-btn--next { right: 28px; }
+    .fv-btn svg {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+
+    /* ── 自動切り替えプログレスバー ── */
+    .fv-progress {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.75);
+      z-index: 20;
+      transition: width linear;
+    }
+
+    /* ── ドットインジケーター ── */
+    .fv-dots {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 20;
+    }
+    .fv-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.25s;
+    }
+    .fv-dot.is-active {
+      background: #fff;
+      transform: scale(1.35);
+    }
+
+    /* ── スライドカウンター ── */
+    .fv-counter {
+      position: absolute;
+      bottom: 20px;
+      right: 36px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 12px;
+      font-family: 'Helvetica Neue', sans-serif;
+      letter-spacing: 0.12em;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    /* ======================================================
+       TOPデザイン画像（【最新】新卒B_top_saisyu.jpg）
+       上部31%（緑のフルブリード）を非表示、それ以降を表示
+    ====================================================== */
+    .design-section {
+      position: relative;
+      line-height: 0;
+      background: #fff;
+      overflow: hidden;
+    }
+    .design-section img {
+      display: block;
+      width: 100%;
+      margin-top: -57%; /* 上部32%（緑セクション）を隠す */
+    }
+    .design-section__link {
+      position: absolute;
+      display: block;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== FV スライダー ===== -->
+  <div class="fv-slider" id="fvSlider">
+
+    <div class="slide is-active">
+      <img src="../../top/新卒B/ローディング画面〜FV展開イメージ/01_loading.jpg" alt="">
+    </div>
+    <div class="slide">
+      <img src="../../top/新卒B/ローディング画面〜FV展開イメージ/02.jpg" alt="はたらくをおもしろく、あたらしく。">
+    </div>
+    <div class="slide">
+      <img src="../../top/新卒B/ローディング画面〜FV展開イメージ/03.jpg" alt="今までにないマッチングで">
+    </div>
+    <div class="slide">
+      <img src="../../top/新卒B/ローディング画面〜FV展開イメージ/04.jpg" alt="悩める企業の課題解決で">
+    </div>
+    <div class="slide">
+      <img src="../../top/新卒B/ローディング画面〜FV展開イメージ/05.jpg" alt="ゆるぎない情熱で">
+    </div>
+    <div class="slide">
+      <img src="../../top/新卒B/ローディング画面〜FV展開イメージ/06.jpg" alt="はたらくをおもしろく、あたらしく。">
+    </div>
+
+    <!-- 左ボタン（戻る） -->
+    <button class="fv-btn fv-btn--prev" id="btnPrev" aria-label="前の画像">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"
+           stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+
+    <!-- 右ボタン（次へ） -->
+    <button class="fv-btn fv-btn--next" id="btnNext" aria-label="次の画像">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"
+           stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+
+    <!-- ドット -->
+    <div class="fv-dots" id="fvDots">
+      <button class="fv-dot is-active" data-target="0" aria-label="1枚目"></button>
+      <button class="fv-dot" data-target="1" aria-label="2枚目"></button>
+      <button class="fv-dot" data-target="2" aria-label="3枚目"></button>
+      <button class="fv-dot" data-target="3" aria-label="4枚目"></button>
+      <button class="fv-dot" data-target="4" aria-label="5枚目"></button>
+      <button class="fv-dot" data-target="5" aria-label="6枚目"></button>
+    </div>
+
+    <!-- カウンター -->
+    <div class="fv-counter" id="fvCounter">1 / 6</div>
+
+    <!-- 自動切り替えプログレスバー -->
+    <div class="fv-progress" id="fvProgress"></div>
+
+  </div>
+
+  <!-- ===== TOP デザイン画像（【最新】フル表示） ===== -->
+  <div class="design-section">
+    <img src="../../top/新卒B/【最新】新卒B_top_saisyu.jpg" alt="新卒B TOP デザイン">
+    <!-- 虎の巻カード（右端 TEAL エリア）→ toranomaki.html -->
+    <a href="/site/新卒B/toranomaki.html"
+       class="design-section__link"
+       style="top:16%;left:51%;width:49%;height:22%;"
+       aria-label="仕事の虎の巻"></a>
+  </div>
+
+  <script>
+  (function () {
+    'use strict';
+
+    const slides    = Array.from(document.querySelectorAll('.slide'));
+    const dots      = Array.from(document.querySelectorAll('.fv-dot'));
+    const counter   = document.getElementById('fvCounter');
+    const btnPrev   = document.getElementById('btnPrev');
+    const btnNext   = document.getElementById('btnNext');
+    const progressEl = document.getElementById('fvProgress');
+    const N         = slides.length; // 6
+    const DURATION  = 680;   // スライドアニメーション (ms)
+    const AUTO_SEC  = 5;     // 自動切り替え秒数
+
+    let current   = 0;
+    let animating = false;
+    let autoTimer = null;
+    let progressTimer = null;
+
+    /* ── プログレスバー ── */
+    function startProgress() {
+      progressEl.style.transition = 'none';
+      progressEl.style.width = '0%';
+      // 強制リフロー
+      progressEl.getBoundingClientRect();
+      progressEl.style.transition = `width ${AUTO_SEC}s linear`;
+      progressEl.style.width = '100%';
+    }
+    function resetProgress() {
+      progressEl.style.transition = 'none';
+      progressEl.style.width = '0%';
+    }
+
+    /* ── 自動切り替えタイマー ── */
+    function startAutoTimer() {
+      clearTimeout(autoTimer);
+      startProgress();
+      autoTimer = setTimeout(() => {
+        goTo((current + 1) % N, 'next');
+        // アニメーション完了後に次のタイマーを再起動（ループ）
+        setTimeout(startAutoTimer, DURATION + 80);
+      }, AUTO_SEC * 1000);
+    }
+    function resetAutoTimer() {
+      clearTimeout(autoTimer);
+      resetProgress();
+      startAutoTimer();
+    }
+
+    /* ── スライド遷移 ── */
+    function goTo(next, dir) {
+      if (animating || next === current) return;
+      animating = true;
+
+      const prev = current;
+      current = next;
+
+      const enterFrom = dir === 'next' ? '100%' : '-100%';
+      const leaveTo   = dir === 'next' ? '-100%' : '100%';
+      const ease      = `transform ${DURATION}ms cubic-bezier(0.77, 0, 0.175, 1)`;
+
+      // 進入スライド：位置セット（transition なし）
+      slides[current].style.transition = 'none';
+      slides[current].style.transform  = `translateX(${enterFrom})`;
+      slides[current].getBoundingClientRect(); // 強制リフロー
+
+      // アニメーション開始
+      slides[current].style.transition = ease;
+      slides[current].style.transform  = 'translateX(0%)';
+      slides[current].classList.add('is-active');
+
+      slides[prev].style.transition = ease;
+      slides[prev].style.transform  = `translateX(${leaveTo})`;
+      slides[prev].classList.remove('is-active');
+
+      // ドット & カウンター 更新
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === current));
+      counter.textContent = `${current + 1} / ${N}`;
+
+      // 完了後リセット
+      setTimeout(() => {
+        slides[prev].style.transition = 'none';
+        slides[prev].style.transform  = 'translateX(100%)';
+        animating = false;
+      }, DURATION + 60);
+    }
+
+    /* ── ボタン操作 ── */
+    btnNext.addEventListener('click', () => {
+      goTo((current + 1) % N, 'next');
+      resetAutoTimer();
+    });
+    btnPrev.addEventListener('click', () => {
+      goTo((current - 1 + N) % N, 'prev');
+      resetAutoTimer();
+    });
+
+    /* ── ドット操作 ── */
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        const target = parseInt(dot.dataset.target, 10);
+        if (target !== current) {
+          goTo(target, target > current ? 'next' : 'prev');
+          resetAutoTimer();
+        }
+      });
+    });
+
+    /* ── キーボード操作 ── */
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { goTo((current + 1) % N, 'next'); resetAutoTimer(); }
+      if (e.key === 'ArrowLeft')  { goTo((current - 1 + N) % N, 'prev'); resetAutoTimer(); }
+    });
+
+    /* ── 自動切り替え開始 ── */
+    startAutoTimer();
+
+  }());
+  </script>
+
+</body>
+</html>

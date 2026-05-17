@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>パーソルテンプスタッフ 新卒採用 2027</title>
+  <link rel="stylesheet" href="/site/新卒A/css/style.css">
+</head>
+<body class="page-fade">
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="header" id="header">
+    <div class="header__inner">
+      <div class="header__logo">
+        <a href="/site/新卒A/">
+          <div class="logo-p">P</div>
+          <span class="logo-name">パーソルテンプスタッフ</span>
+        </a>
+      </div>
+      <nav class="header__nav">
+        <ul>
+          <li><a href="#">採用にかける想い</a></li>
+          <li><a href="#">私たちを知る</a></li>
+          <li><a href="#">仕事を知る</a></li>
+          <li><a href="#">ラッキーを知る</a></li>
+          <li><a href="#">採用情報</a></li>
+        </ul>
+      </nav>
+      <div class="header__actions">
+        <a href="#" class="hdr-intern">Intern/Event</a>
+        <a href="#" class="hdr-entry">ENTRY/Mypage</a>
+        <button class="hdr-menu" aria-label="メニュー">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==============================================
+       SCROLL HERO (300vh)
+       ├ 0-20%  : FV 表示 → 第2画像にクロスフェード
+       ├ 20-65% : ボディコピーが右から流れ込む
+       └ 65-100%: 静止（コピー表示状態）
+  =============================================== -->
+  <section class="scroll-hero" id="scrollHero">
+    <div class="scroll-hero__inner">
+
+      <!-- Layer 1: FV -->
+      <div class="scene-bg scene-bg--1">
+        <img
+          src="../../fv/新卒A.jpg"
+          alt="まかせろ、すべてのはたらく人生よ。"
+          style="object-position: center 18%;"
+        >
+      </div>
+
+      <!-- Layer 2: TOPデザインの2画面目（スクロール後シーン） -->
+      <div class="scene-bg scene-bg--2">
+        <img
+          src="../../fv/新卒A_scroll.jpg"
+          alt=""
+          style="object-position: center top;"
+        >
+      </div>
+
+      <!-- SCROLL インジケーター -->
+      <div class="hero-scroll" id="scrollInd">
+        <span>SCROLL</span>
+        <div class="hero-scroll__bar"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==============================================
+       TOP デザイン画像（SPECIAL〜RECRUIT）
+       上部FV部分をCSSでクロップして SPECIAL 以降のみ表示
+  =============================================== -->
+  <div class="design-section">
+    <img
+      src="../../top/新卒A/新卒A_top_saisyu_v2.jpg"
+      alt="採用サイト デザイン — SPECIAL / ABOUT / PICK UP / RECRUIT"
+    >
+    <!-- PICK UP 02 PEOPLE → 社員紹介へ -->
+    <a href="/site/新卒A/employee.html"
+       class="design-section__link"
+       style="top:77%;left:0;width:49%;height:9%;"
+       aria-label="PEOPLE — 社員紹介へ"></a>
+  </div>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__logo">
+        <div class="logo-p">P</div>
+        <span class="logo-name">パーソルテンプスタッフ</span>
+      </div>
+      <p class="footer__copy">© PERSOL TEMPSTAFF CO., LTD.</p>
+    </div>
+  </footer>
+
+  <script src="/site/新卒A/js/main.js"></script>
+</body>
+</html>

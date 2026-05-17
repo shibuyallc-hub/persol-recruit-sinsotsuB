@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>パーソルテンプスタッフ 新卒採用 2027</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #000; }
+
+    /* ── スクロールヒーロー ── */
+    .scroll-hero {
+      position: relative;
+      height: 500vh; /* 5枚 × 100vh */
+    }
+    .scroll-hero__sticky {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .scene-bg {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0s; /* JSで直接制御 */
+    }
+    .scene-bg--1 { opacity: 1; } /* 最初は1枚目を表示 */
+    .scene-bg img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+    }
+
+    /* ── SCROLL インジケーター ── */
+    .hero-scroll {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      opacity: 1;
+      transition: opacity 0.4s;
+      z-index: 10;
+    }
+    .hero-scroll.hidden { opacity: 0; pointer-events: none; }
+    .hero-scroll__bar {
+      width: 1px;
+      height: 40px;
+      background: rgba(255,255,255,0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-scroll__bar::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      animation: scrollBar 1.4s ease-in-out infinite;
+    }
+    @keyframes scrollBar {
+      0%   { top: -100%; }
+      100% { top: 100%; }
+    }
+
+    /* ── TOPデザイン画像（FV以降） ── */
+    .design-section {
+      line-height: 0;
+      background: #fff;
+      overflow: hidden;
+      position: relative;
+    }
+    .design-section img {
+      display: block;
+      width: 100%;
+      margin-top: -56.2%;
+    }
+    .design-section__link {
+      position: absolute;
+      display: block;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== SCROLL HERO (500vh) ===== -->
+  <section class="scroll-hero" id="scrollHero">
+    <div class="scroll-hero__sticky">
+
+      <div class="scene-bg scene-bg--1">
+        <img src="../../top/新卒B/ローディング画面〜FV展開イメージ/01_loading.jpg" alt="">
+      </div>
+      <div class="scene-bg scene-bg--2">
+        <img src="../../top/新卒B/ローディング画面〜FV展開イメージ/02.jpg" alt="">
+      </div>
+      <div class="scene-bg scene-bg--3">
+        <img src="../../top/新卒B/ローディング画面〜FV展開イメージ/03.jpg" alt="">
+      </div>
+      <div class="scene-bg scene-bg--4">
+        <img src="../../top/新卒B/ローディング画面〜FV展開イメージ/04.jpg" alt="">
+      </div>
+      <div class="scene-bg scene-bg--5">
+        <img src="../../top/新卒B/ローディング画面〜FV展開イメージ/05.jpg" alt="">
+      </div>
+
+      <div class="hero-scroll" id="scrollInd">
+        <span>SCROLL</span>
+        <div class="hero-scroll__bar"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TOP デザイン画像 ===== -->
+  <div class="design-section">
+    <img src="../../top/新卒B/新卒B_top_saisyu.jpg" alt="新卒B TOP デザイン">
+    <!-- 虎の巻カード → toranomaki.html -->
+    <a href="/site/新卒B/toranomaki.html"
+       class="design-section__link"
+       style="top:43.2%;left:50%;width:50%;height:15.9%;"
+       aria-label="パーソルテンプスタッフの営業のしごと虎の巻"></a>
+  </div>
+
+  <script>
+  (function () {
+    'use strict';
+
+    const scene    = document.getElementById('scrollHero');
+    const bgs      = Array.from(document.querySelectorAll('.scene-bg'));
+    const scrollInd = document.getElementById('scrollInd');
+    const N        = bgs.length; // 5
+
+    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+    function easeInOut(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+
+    function update() {
+      const sy = window.scrollY;
+
+      if (scrollInd) scrollInd.classList.toggle('hidden', sy > 60);
+
+      if (!scene) return;
+      const rect    = scene.getBoundingClientRect();
+      const scrolled = -rect.top;
+      const total    = scene.offsetHeight - window.innerHeight;
+      const p        = clamp(scrolled / total, 0, 1);
+
+      // p を 0〜N-1 にマッピング
+      const pos = p * (N - 1);        // 0.0 〜 4.0
+      const idx = Math.min(Math.floor(pos), N - 2); // 0〜3（フェードアウト側）
+      const t   = easeInOut(pos - idx); // 0〜1（セグメント内進捗）
+
+      bgs.forEach((bg, i) => {
+        let opacity;
+        if (i < idx)       opacity = 0;
+        else if (i === idx)     opacity = 1 - t;
+        else if (i === idx + 1) opacity = t;
+        else                    opacity = 0;
+        bg.style.opacity = String(opacity);
+      });
+
+      // 最後の画像は常に残す
+      if (p >= 1) {
+        bgs.forEach((bg, i) => {
+          bg.style.opacity = i === N - 1 ? '1' : '0';
+        });
+      }
+    }
+
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  }());
+  </script>
+
+</body>
+</html>
