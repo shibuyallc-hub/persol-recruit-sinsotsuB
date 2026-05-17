@@ -431,9 +431,9 @@ ul { list-style: none; }
 .hero-copy__para:last-child { margin-bottom: 0; }
 .hero-copy__line {
   display: block;
-  font-family: 'A P-OTF 瓦ゴシック ProN', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+  font-family: 'Noto Serif JP', 'Hiragino Mincho ProN', 'Yu Mincho', 'Times New Roman', serif;
   font-size: clamp(0.8rem, 1.2vw, 1.05rem);
-  font-weight: 400;
+  font-weight: 700;
   color: #fff;
   line-height: 2;
   letter-spacing: 0.08em;
