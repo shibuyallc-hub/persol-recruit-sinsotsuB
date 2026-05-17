@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>パーソルテンプスタッフ 中途採用 — 中途A（スライダー版）</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { line-height: 0; background: #000; }
+
+    /* ======================================================
+       FV スライダー（無限ループ横スライド）
+    ====================================================== */
+    .fv-slider {
+      width: 100%;
+      height: 100svh;
+      overflow: hidden;
+    }
+    .fv-track {
+      display: flex;
+      height: 100%;
+      will-change: transform;
+    }
+
+    /* スライド1枚 = 40vw → 2.5枚表示（2枚全体＋3枚目途中） */
+    .fv-slide {
+      flex-shrink: 0;
+      width: 40vw;
+      height: 100%;
+    }
+    .fv-slide img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* ======================================================
+       デザインセクション（ヘッダー＋FV部分をカット）
+       中途A_top_icon_saisyu_2.jpg: 3201×8913px (比率2.785)
+       ヘッダー+FV ≈ 上部24% → margin-top: -(24%×2.785) ≈ -67%
+    ====================================================== */
+    .design-section {
+      position: relative;
+      overflow: hidden;
+      line-height: 0;
+      background: #fff;
+    }
+    .design-section img {
+      display: block;
+      width: 100%;
+      margin-top: -67%;   /* ※表示確認後に微調整 */
+    }
+    .design-section__link {
+      position: absolute;
+      display: block;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== FV スライダー ===== -->
+  <div class="fv-slider">
+    <div class="fv-track" id="fvTrack">
+
+      <!-- 実画像 4枚 -->
+      <div class="fv-slide">
+        <img src="../../top/中途A/中途A_1人目.png" alt="">
+      </div>
+      <div class="fv-slide">
+        <img src="../../top/中途A/中途A_2人目.png" alt="">
+      </div>
+      <div class="fv-slide">
+        <img src="../../top/中途A/中途A_3人目.png" alt="">
+      </div>
+      <div class="fv-slide">
+        <img src="../../top/中途A/中途A_4人目.png" alt="">
+      </div>
+
+      <!-- クローン 3枚（末尾シームレスループ用） -->
+      <div class="fv-slide">
+        <img src="../../top/中途A/中途A_1人目.png" alt="">
+      </div>
+      <div class="fv-slide">
+        <img src="../../top/中途A/中途A_2人目.png" alt="">
+      </div>
+      <div class="fv-slide">
+        <img src="../../top/中途A/中途A_3人目.png" alt="">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== デザインセクション ===== -->
+  <div class="design-section">
+    <img src="../../top/中途A/中途A_top_icon_saisyu_2.jpg?v=2" alt="中途A TOP デザイン">
+    <!-- リンク位置: index_icon.html の top:68.4% → カット後 top:~58% ※要確認 -->
+  </div>
+
+  <script>
+  (function () {
+    'use strict';
+
+    const track     = document.getElementById('fvTrack');
+    const N_REAL    = 4;      // 実画像枚数
+    const SLIDE_W   = 40;     // 1枚のスライド幅 (vw)
+    const DURATION  = 700;    // スライドアニメーション (ms)
+    const INTERVAL  = 5000;   // 自動切り替え間隔 (ms)
+    let current     = 0;      // 現在の先頭インデックス（0 = 初期位置）
+    let isAnimating = false;
+
+    function goNext() {
+      if (isAnimating) return;
+      isAnimating = true;
+
+      current++;
+
+      /* スライドイン */
+      track.style.transition = `transform ${DURATION}ms cubic-bezier(0.4, 0, 0.2, 1)`;
+      track.style.transform  = `translateX(${-current * SLIDE_W}vw)`;
+
+      setTimeout(function () {
+        /* N_REAL ステップ進んだらクローン→実画像へ瞬時リセット */
+        if (current >= N_REAL) {
+          track.style.transition = 'none';
+          track.style.transform  = 'translateX(0vw)';
+          current = 0;
+        }
+        isAnimating = false;
+      }, DURATION + 30);
+    }
+
+    setInterval(goNext, INTERVAL);
+
+  }());
+  </script>
+
+</body>
+</html>
